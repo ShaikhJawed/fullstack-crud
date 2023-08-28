@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,15 @@ namespace DotNetCoreCRUD
                     ValidateAudience = false
                 };
             });
+
+            services.AddSwaggerGen(options => {
+                options.SwaggerDoc("api", new OpenApiInfo()
+                {
+                    Description = "API with JWT Authentication, Authorization and CRUD operations.",
+                    Title = "DotNetCoreCRUD",
+                    Version = "1"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +84,11 @@ namespace DotNetCoreCRUD
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options => {
+                options.SwaggerEndpoint("api/swagger.json", "DotNetCoreCRUD");
+            });
 
             app.UseEndpoints(endpoints =>
             {
