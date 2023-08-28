@@ -1,4 +1,5 @@
 using DotNetCoreCRUD.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,9 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DotNetCoreCRUD
@@ -32,6 +35,28 @@ namespace DotNetCoreCRUD
             services.AddDbContext<CRUDDBContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("CRUDConnection"));
+            });
+
+            var dbContext = services.BuildServiceProvider().GetService<CRUDDBContext>();
+            services.AddSingleton<IRefreshTokenGenertor>(provider => new RefreshTokenGenerator(dbContext));
+
+            var jwtSetting = Configuration.GetSection("JWTSettings");
+            services.Configure<JWTSettings>(jwtSetting);
+
+            var authKey = Configuration.GetValue<string>("JWTSettings:SecurityKey");
+            services.AddAuthentication(item => {
+                item.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                item.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(item => {
+                item.RequireHttpsMetadata = true;
+                item.SaveToken = true;
+                item.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
             });
         }
 
