@@ -84,6 +84,13 @@ namespace DotNetCoreCRUD
             app.UseAuthentication();
 
             app.UseAuthorization();
+            app.UseCors(options =>
+            {
+                options
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
 
             app.UseSwagger();
             app.UseSwaggerUI(options => {
