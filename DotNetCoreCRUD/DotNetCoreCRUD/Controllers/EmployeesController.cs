@@ -87,7 +87,7 @@ namespace DotNetCoreCRUD.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(employee);
         }
 
         // POST: api/Employees
