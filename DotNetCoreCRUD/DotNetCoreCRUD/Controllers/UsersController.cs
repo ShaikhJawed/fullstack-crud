@@ -55,7 +55,7 @@ namespace DotNetCoreCRUD.Controllers
             var _user = await context.Users.FirstOrDefaultAsync(x => x.Username == user.Username && x.Password == user.Password);
             if (_user == null)
             {
-                Unauthorized();
+                return Unauthorized();
             }
 
             //JWT Token Generation
