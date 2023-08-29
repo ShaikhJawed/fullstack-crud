@@ -3,20 +3,25 @@
     <div class="card">
         <div class="card-body">
             <h1 class="card-title">Login</h1>
-            <form>
+            <form [formGroup]="loginForm" (ngSubmit)="ProceedLogin()">
             <div class="mb-3">
                 <label for="txtUsername"  class="form-label">Username</label>
-                <input type="text" class="form-control" id="txtUsername" autocomplete="off" placeholder="Username">
+                <input type="text" class="form-control" id="txtUsername" formControlName="username" autocomplete="off" placeholder="Username">
+                <span class="text-danger" *ngIf="username && username.invalid && username.touched">Username is reuired</span>
             </div>
             <div class="mb-3">
                 <label for="txtPassword"  class="form-label">Password</label>
-                <input type="password" class="form-control"  id="txtPassword" autocomplete="off" placeholder="Password">
+                <input type="password" class="form-control"  id="txtPassword" formControlName="password" autocomplete="off" placeholder="Password">
+                <span class="text-danger" *ngIf="password && password.invalid && password.touched">Password is reuired</span>
             </div>
-            <div class="col-lg-3">
+            <div class="row">
+            <div class="col-lg-2">
                 <button class="btn btn-primary" type="submit">Login</button>
             </div>
-            <div classs="col-lg-3">
+            <div class="col-lg-10 pl-0">
+                <span class="text-danger">{{message}}</span>
             </div>
+        </div>
         </form>
         </div>
     </div>
