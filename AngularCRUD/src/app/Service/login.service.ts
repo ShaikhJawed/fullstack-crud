@@ -12,4 +12,9 @@ export class LoginService  {
   ProceedLogin(inputData:any){
     return this.http.post(this.login_url, inputData);
   }
+
+  IsLogged(){
+    return localStorage.getItem('token') != null;
+  }
+
 }

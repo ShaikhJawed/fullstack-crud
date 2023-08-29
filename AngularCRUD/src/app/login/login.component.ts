@@ -12,7 +12,7 @@ export class LoginComponent {
     message = '';
     loginResponse:any;
     constructor(private service: LoginService, private route:Router) {
-      
+      localStorage.clear();
       
     }
     
