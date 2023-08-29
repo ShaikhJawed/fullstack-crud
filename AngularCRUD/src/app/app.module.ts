@@ -9,7 +9,8 @@ import { EmployeeEntryComponent } from './employee-entry/employee-entry.componen
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { TokenInterceptor } from './Interceptor/token.interceptor';
 
 
 @NgModule({
@@ -27,7 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{provide:HTTP_INTERCEPTORS, useClass:TokenInterceptor, multi:true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
